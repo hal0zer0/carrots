@@ -2,11 +2,11 @@ import numpy as np
 
 
 class LinearRegression:
-    def __init__(self, learning_rate=0.01, iterations=500, lam=1, verbose=True):
+    def __init__(self, learning_rate=0.01, iterations=500, lam=1):
         self.learning_rate = learning_rate
         self.iterations = iterations
         self.lam = lam
-        self.verbose = verbose
+        self.verbose = False
 
         self.final_thetas = []
         self.cost_history = []
@@ -28,7 +28,7 @@ class LinearRegression:
     def _gradient_descent(self, x, y, thetas, ):
 
         self.cost_history = np.zeros(self.iterations)
-        self.theta_history = np.zeros((self.iterations, 2))
+        self.theta_history = np.zeros((self.iterations, 2)) # adjust for multivariate
 
         for it in range(self.iterations):
 
@@ -38,11 +38,13 @@ class LinearRegression:
             if self.verbose:
                 print("Iteration: {}\tCost: {}".format(it + 1, self.cost_history[it]))
                 theta_string = " ".join(str(theta) for theta in thetas)
-                print("Thetas for iteration {}: {}".format(it, theta_string))
+                print("Thetas for iteration {}: {}".format(it +1 , theta_string))
 
         return thetas, self.cost_history, self.theta_history
 
-    def fit(self, x, y, autopad_x=True):
+    def fit(self, x, y, autopad_x=False, verbose=True):
+        # adjust for multivariate
+        self.verbose = verbose
         thetas = np.random.randn(2, 1)
         if autopad_x:
             x = np.c_[np.ones((len(x), 1)), x]
