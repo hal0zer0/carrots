@@ -2,37 +2,51 @@ import numpy as np
 
 
 class LinearRegression:
-    def __init__(self):
+    def __init__(self, learning_rate=0.01, iterations=500, lam=1, verbose=True):
+        self.learning_rate = learning_rate
+        self.iterations = iterations
+        self.lam = lam
+        self.verbose = verbose
+
         self.final_thetas = []
         self.cost_history = []
-        self.theta_history = np.array([])
+        self.theta_history = []
 
-    def _cost(self, thetas, x, y):
+    @staticmethod
+    def _cost(thetas, x, y):
         m = len(y)
         predictions = x.dot(thetas)
-        cost = (1/2 * m) * np.sum(np.square(predictions - y))
+        cost = (1 / 2 * m) * np.sum(np.square(predictions - y))
         return cost
 
-    def _gradient_descent(self, x, y, thetas, learning_rate=0.01, iterations=500, lam=1, verbose=True):
+    def _update_thetas(self, x, y, thetas):
         m = len(y)
-        cost_history = np.zeros(iterations)
-        theta_history = np.zeros((iterations, 2))
+        prediction = np.dot(x, thetas)
+        return (thetas * (1 - (self.learning_rate * (self.lam / m))) - (1 / m) * self.learning_rate * (
+                x.T.dot((prediction - y))))
 
-        for it in range(iterations):
-            prediction = np.dot(x, thetas)
-            thetas = (thetas * (1 - (learning_rate * (lam/m))) - (1/m)*learning_rate*(x.T.dot((prediction - y))))
-            theta_history[it,:] = thetas.T
-            cost_history[it] = self._cost(thetas, x, y)
-            if verbose:
-                print("Iteration: {}\tCost: {}".format(it, cost_history[it]))
-                print(thetas)
+    def _gradient_descent(self, x, y, thetas, ):
 
-        return thetas, cost_history, theta_history
+        self.cost_history = np.zeros(self.iterations)
+        self.theta_history = np.zeros((self.iterations, 2))
 
-    def fit(self, x, y):
-        thetas = np.random.randn(2,1)
-        X_b = np.c_[np.ones((len(x), 1)), x]
-        self.final_thetas, self.cost_history, self.theta_history = self._gradient_descent(X_b, y, thetas)
+        for it in range(self.iterations):
+
+            thetas = self._update_thetas(x, y, thetas)
+            self.theta_history[it, :] = thetas.T
+            self.cost_history[it] = self._cost(thetas, x, y)
+            if self.verbose:
+                print("Iteration: {}\tCost: {}".format(it + 1, self.cost_history[it]))
+                theta_string = " ".join(str(theta) for theta in thetas)
+                print("Thetas for iteration {}: {}".format(it, theta_string))
+
+        return thetas, self.cost_history, self.theta_history
+
+    def fit(self, x, y, autopad_x=True):
+        thetas = np.random.randn(2, 1)
+        if autopad_x:
+            x = np.c_[np.ones((len(x), 1)), x]
+        self.final_thetas, self.cost_history, self.theta_history = self._gradient_descent(x, y, thetas)
 
     def predict(self, x):
         return self.final_thetas[0] + x * self.final_thetas[1]
