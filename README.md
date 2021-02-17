@@ -2,12 +2,13 @@
 
 Is a machine learning library written in Python purely as an educational exercise.  
 
-**THERE IS NO GOOD REASON WHATSOEVER TO USE CARROTS IN ANY KIND OF PRODUCTION ENVIRONMENT**
+**THERE IS NO REASON WHATSOEVER TO USE CARROTS IN ANY KIND OF PRODUCTION ENVIRONMENT**
 
 ## Features
-* Extremely simple model-based approach
+* Extremely simple model-as-an-object design
 * Univariate linear regression (multivariate in progress)
 * Linear sample data generation (with or without random noise)
+* Includes (some) unit tests, more in progress
 * That's about it right now
 
 ## Example implementation
@@ -35,5 +36,10 @@ model_object.cost_history
 model_object.theta_history
 ```
 ## Coming Soon
-Multivariate Linear Regression
-Each model will have built-in reporting via model_object.show_report()
+* Multivariate Linear Regression
+* Each model will have built-in reporting via model_object.show_report()
+* Feature scaling
+
+## Coming Eventually
+* Logistical regression (classification)
+* Neural Networks
