@@ -28,7 +28,7 @@ class LinearRegression:
     def _gradient_descent(self, x, y, thetas, ):
 
         self.cost_history = np.zeros(self.iterations)
-        self.theta_history = np.zeros((self.iterations, 2)) # adjust for multivariate
+        self.theta_history = np.zeros((self.iterations, 2))  # adjust for multivariate?
 
         for it in range(self.iterations):
 
@@ -43,11 +43,20 @@ class LinearRegression:
         return thetas, self.cost_history, self.theta_history
 
     def fit(self, x, y, autopad_x=False, verbose=True):
-        # adjust for multivariate
+        """
+        
+        :param x:
+        :param y:
+        :param autopad_x:
+        :param verbose:
+        :return:
+        """
         self.verbose = verbose
-        thetas = np.random.randn(2, 1)
+
+        thetas = np.random.randn(2, 1)  # adjust for multivariate
         if autopad_x:
             x = np.c_[np.ones((len(x), 1)), x]
+
         self.final_thetas, self.cost_history, self.theta_history = self._gradient_descent(x, y, thetas)
 
     def predict(self, x):
